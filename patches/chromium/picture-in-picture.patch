@@ -1,0 +1,44 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Heilig Benedek <benecene@gmail.com>
+Date: Sat, 10 Aug 2019 00:41:50 +0200
+Subject: feat: enable picture in picture mode for video players
+
+These files are needed to implement PiP, but the Electron build patches out
+chrome's generated resources for our own. This updates the #include so that we
+don't get errors for Chrome's generated resources, which are non-existent
+because we don't generate them in our build.
+
+diff --git a/chrome/browser/ui/views/overlay/video_overlay_window_views.cc b/chrome/browser/ui/views/overlay/video_overlay_window_views.cc
+index 1ef7adec61a6b5f85177bb035f2534a319cd8f4f..dcb329f794e7a579e37eb370db4378b8cded3d69 100644
+--- a/chrome/browser/ui/views/overlay/video_overlay_window_views.cc
++++ b/chrome/browser/ui/views/overlay/video_overlay_window_views.cc
+@@ -14,9 +14,11 @@
+ #include "base/time/time.h"
+ #include "base/timer/timer.h"
+ #include "build/build_config.h"
++#if 0
+ #include "chrome/browser/profiles/profile.h"
+ #include "chrome/browser/ui/browser.h"
+ #include "chrome/browser/ui/browser_finder.h"
++#endif
+ #include "chrome/browser/ui/color/chrome_color_id.h"
+ #include "chrome/browser/ui/views/overlay/back_to_tab_label_button.h"
+ #include "chrome/browser/ui/views/overlay/close_image_button.h"
+@@ -53,7 +55,7 @@
+ #include "ui/aura/window.h"
+ #endif
+ 
+-#if BUILDFLAG(IS_WIN)
++#if 0
+ #include "chrome/browser/shell_integration_win.h"
+ #include "ui/aura/window.h"
+ #include "ui/aura/window_tree_host.h"
+@@ -279,7 +281,7 @@ std::unique_ptr<VideoOverlayWindowViews> VideoOverlayWindowViews::Create(
+   overlay_window->Init(std::move(params));
+   overlay_window->OnRootViewReady();
+ 
+-#if BUILDFLAG(IS_WIN)
++#if 0
+   std::wstring app_user_model_id;
+   Browser* browser =
+       chrome::FindBrowserWithWebContents(controller->GetWebContents());
